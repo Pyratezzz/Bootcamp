@@ -6,7 +6,7 @@ class Player{
 	private int games;
 	private int points;
 	private char id;
-	
+
 	Player(char id){
 		this.id = id;
 	}
@@ -45,115 +45,99 @@ class Player{
 }
 
 public class Tournament {
-	
+
 	private Player p1;
 	private Player p2;
-	
+
 	Tournament(char p1Id,char p2Id){
 		p1 = new Player(p1Id);
 		p2 = new Player(p2Id);
 	}
-	
+
 	private Player getWinner(char winner){
-        if (winner == p1.getId()) return p1;
-        else return p2;
-    }
-	
+		if (winner == p1.getId()) return p1;
+		else return p2;
+	}
+
 	private Player getLooser(char winner){
-        if (winner != p1.getId()) return p1;
-        else return p2;
-    }
-	
+		if (winner != p1.getId()) return p1;
+		else return p2;
+	}
+
 	private void updateSets(char winner){
-		
-		Player winnerPlayer = getWinner(winner);
-		winnerPlayer.setSets(winnerPlayer.getSets()+1);
+		getWinner(winner).setSets(getWinner(winner).getSets() + 1);
 	}
-	
+
 	private void updateGames(char winner){
-		Player winnerPlayer = getWinner(winner);
-		winnerPlayer.setGames(winnerPlayer.getGames() +1 );
-		
-		if( Math.abs(p1.getGames()-p2.getGames()) >= 2 && winnerPlayer.getGames() >= 6 ){
-			updateSets( winnerPlayer.getId() );
-			p1.setGames(0);
-			p2.setGames(0);
-		}
-		
+
 	}
-	
+
 	public void updatePoints(char winner){
 		List<Integer> points = new ArrayList<Integer>();
-        points.add(0); //0
-        points.add(15); //1
-        points.add(30); //2
-        points.add(40); //3
-        points.add(50); //4
+		points.add(0); //0
+		points.add(1); //1
+		points.add(2); //2
+		points.add(3); //3
+		points.add(4); //4
+		points.add(5); //5
 
-        Player win = getWinner(winner);
-        Player loos = getLooser(winner);
+		Player win = getWinner(winner);
+		Player loos = getLooser(winner);
 
-//        if (win.getPoints() <= 30){
-//            
-//            win.setPoints(points.get(points.indexOf(win.getPoints()) + 1));
-//            
-//        } else if (win.getPoints() == 40 && loos.getPoints() <= 30){
-//            
-//            win.setPoints(0);
-//            loos.setPoints(0);
-//            updateGames(winner);
-//        
-//        } else if (win.getPoints() == 30 && loos.getPoints() == 40){
-//            
-//            win.setPoints(40);
-//        
-//        } else if(win.getPoints() == 40 && loos.getPoints() == 40){
-//        
-//            win.setPoints(50);
-//        
-//        } else if(win.getPoints() == 50 && loos.getPoints() == 40){
-//        
-//            win.setPoints(0);
-//            loos.setPoints(0);
-//            updateGames(winner);
-//        
-//        } else if(win.getPoints() == 40 && loos.getPoints() == 50){
-//        
-//            win.setPoints(40);
-//            loos.setPoints(40);
-//        
-//        }
-        
-        if (win.getPoints() - loos.getPoints() >=10 && win.getPoints() >= 40){
-            win.setPoints(0);
-            loos.setPoints(0);
-            updateGames(winner);
-        } else if (win.getPoints() <= 30) {
-            win.setPoints(points.get(points.indexOf(win.getPoints()) + 1));
-        } else if (loos.getPoints() == 40){
-            win.setPoints(50);
-        } else {
-            loos.setPoints(40);
-        }
-        
+		if (win.getPoints() - loos.getPoints() >=1 && win.getPoints() >= 4 && win.getPoints()%2 == 0){
+			win.setPoints(0);
+			loos.setPoints(0);
+			//call
+		} else {
+			win.setPoints(((win.getPoints()) + 1));
+		}
+
+		printScore();
 	}
-	
+
 	public void printScore(){
+
+		List<String>  points = new ArrayList<String>();
+		points.add("0");
+		points.add("15");
+		points.add("30");
+		points.add("40");
+		points.add("");
+		points.add("Advatage");
+
+//		System.out.print("playerA: " + "  " + String.valueOf(p1.getPoints()>4?p1.getPoints()%2+4:p1.getPoints()));
+//		System.out.println(" B: " + " " + String.valueOf(p2.getPoints()>4?p2.getPoints()%2+4:p2.getPoints()));
+
 		System.out.println("player:    " + p1.getId() +"    " + p2.getId());
 		System.out.println(String.format("sets:    %3d  %3d",p1.getSets(),p2.getSets()));
 		System.out.println(String.format("games:   %3d  %3d",p1.getGames(),p2.getGames()));
-		System.out.println(String.format("points:  %3d  %3d",p1.getPoints(),p2.getPoints()));
+		System.out.println(String.format("points:  %3d  %3d",points.get(p1.getPoints()>4?p1.getPoints()%2+4:p1.getPoints()),points.get(p2.getPoints()>4?p2.getPoints()%2+4:p2.getPoints())));
+
 	}
-	
-	public static void main(String args[]){
-		String input = "ABABABAAB";
-		Tournament t = new Tournament('A','B');
-		
-		for(int itr = 0; itr < input.length(); itr++){
-			t.updatePoints(input.charAt(itr));
-		}
-		t.printScore();
+
+	public static void main (String[] args){
+		Tournament t = new Tournament('A', 'B');
+		t.updatePoints('A');
+		t.updatePoints('B');
+		t.updatePoints('A');
+		t.updatePoints('B');
+		t.updatePoints('A');
+		t.updatePoints('B');
+		t.updatePoints('A');
+		t.updatePoints('B');
+
+		t.updatePoints('A');
+		t.updatePoints('B');
+
+		t.updatePoints('A');
+		t.updatePoints('B');
+
+		t.updatePoints('A');
+		t.updatePoints('B');
+//        t.updatePoints('A');
+
+
+
 	}
 
 }
-
